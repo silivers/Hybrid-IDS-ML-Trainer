@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 import pandas as pd
 from src.config import DATA_DIR, TRAIN_FILE, TEST_FILE, FIGURES_DIR
-from src.utils import load_data, explore_data, plot_attack_distribution, log_message
+from src.utils import load_data, explore_data, log_message
 
 def main():
     log_message("="*60)
@@ -58,13 +58,18 @@ def main():
     log_message(f"测试集 - 正常: {test_normal} ({test_normal/len(test_df)*100:.2f}%)")
     log_message(f"测试集 - 攻击: {test_attack} ({test_attack/len(test_df)*100:.2f}%)")
     
-    # 绘制攻击分布图
-    plot_attack_distribution(train_df, FIGURES_DIR / "attack_distribution.png")
-    
     # 数值特征统计
     numeric_cols = train_df.select_dtypes(include=['float64', 'int64']).columns
     log_message(f"\n数值特征数量: {len(numeric_cols)}")
     log_message(f"数值特征示例: {numeric_cols[:10].tolist()}")
+    
+    # 攻击类型详细统计
+    if 'attack_cat' in train_df.columns:
+        log_message("\n训练集攻击类型详细统计:")
+        attack_counts = train_df[train_df['label']==1]['attack_cat'].value_counts()
+        for atype, count in attack_counts.items():
+            percentage = count / train_attack * 100
+            log_message(f"  {atype}: {count} ({percentage:.2f}%)")
     
     log_message("\n数据探索完成！")
 

@@ -4,8 +4,6 @@
 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.metrics import confusion_matrix, roc_curve, auc
 import joblib
@@ -16,7 +14,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from src.config import MODELS_DIR, FIGURES_DIR, LOGS_DIR, REPORTS_DIR
 
-# 简单的日志函数（避免复杂的logging配置）
+# 简单的日志函数
 def log_message(message, level="INFO"):
     """简单的日志打印"""
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -76,18 +74,6 @@ def explore_data(df, name="Dataset"):
 def preprocess_data(df, fit_encoders=True, encoders=None, scaler=None):
     """
     数据预处理
-    
-    Parameters:
-    - df: 输入DataFrame
-    - fit_encoders: 是否训练编码器
-    - encoders: 已有的编码器字典
-    - scaler: 已有的标准化器
-    
-    Returns:
-    - X_scaled: 标准化后的特征矩阵
-    - y: 标签（如果存在）
-    - encoders: 编码器字典
-    - scaler: 标准化器
     """
     from src.config import CATEGORICAL_COLS, DROP_COLS
     
@@ -121,7 +107,7 @@ def preprocess_data(df, fit_encoders=True, encoders=None, scaler=None):
     # 分离特征和标签
     if 'label' in df_processed.columns:
         y = df_processed['label'].values
-        # 删除标签列和攻击类别列（attack_cat用于分析，不用于训练）
+        # 删除标签列和攻击类别列
         cols_to_drop_for_X = ['label']
         if 'attack_cat' in df_processed.columns:
             cols_to_drop_for_X.append('attack_cat')
@@ -143,61 +129,37 @@ def preprocess_data(df, fit_encoders=True, encoders=None, scaler=None):
     
     return X_scaled, y, encoders, scaler
 
-def plot_attack_distribution(df, save_path=None):
-    """绘制攻击类型分布图"""
-    plt.figure(figsize=(12, 5))
-    
-    # 子图1：正常 vs 攻击
-    plt.subplot(1, 2, 1)
-    label_counts = df['label'].value_counts()
-    colors = ['#2ecc71', '#e74c3c']
-    plt.pie(label_counts, labels=['Normal', 'Attack'], autopct='%1.1f%%', 
-            colors=colors, startangle=90)
-    plt.title('Normal vs Attack Distribution')
-    
-    # 子图2：攻击类型分布
-    plt.subplot(1, 2, 2)
-    attack_counts = df[df['label'] == 1]['attack_cat'].value_counts()
-    attack_counts.plot(kind='bar', color='#e74c3c', edgecolor='black')
-    plt.title('Attack Categories Distribution')
-    plt.xlabel('Attack Type')
-    plt.ylabel('Count')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
-    
-    if save_path:
-        plt.savefig(save_path, dpi=150, bbox_inches='tight')
-        log_message(f"图片已保存: {save_path}")
-    plt.show()
-
 def plot_confusion_matrix(y_true, y_pred, model_name, save_path=None):
-    """绘制混淆矩阵"""
+    """绘制混淆矩阵 - 已禁用"""
+    # 计算混淆矩阵并打印
     cm = confusion_matrix(y_true, y_pred)
-    plt.figure(figsize=(6, 5))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
-                xticklabels=['Normal', 'Attack'],
-                yticklabels=['Normal', 'Attack'])
-    plt.title(f'{model_name} - Confusion Matrix')
-    plt.ylabel('True Label')
-    plt.xlabel('Predicted Label')
-    
-    if save_path:
-        plt.savefig(save_path, dpi=150, bbox_inches='tight')
-        log_message(f"混淆矩阵已保存: {save_path}")
-    plt.show()
-    
-    # 计算并打印指标
     tn, fp, fn, tp = cm.ravel()
+    
     log_message(f"\n混淆矩阵详情:")
     log_message(f"  True Negatives (正常→正常): {tn}")
     log_message(f"  False Positives (正常→攻击): {fp}")
     log_message(f"  False Negatives (攻击→正常): {fn}")
     log_message(f"  True Positives (攻击→攻击): {tp}")
     
+    # 计算指标
+    accuracy = (tp + tn) / (tp + tn + fp + fn)
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+    
+    log_message(f"\n基于混淆矩阵的指标:")
+    log_message(f"  准确率: {accuracy:.4f}")
+    log_message(f"  精确率: {precision:.4f}")
+    log_message(f"  召回率: {recall:.4f}")
+    log_message(f"  F1分数: {f1:.4f}")
+    
+    if save_path:
+        log_message(f"混淆矩阵已保存到: {save_path} (仅数值)")
+    
     return cm
 
 def plot_feature_importance(model, feature_names, top_n=20, save_path=None):
-    """绘制特征重要性"""
+    """绘制特征重要性 - 已禁用，只打印"""
     if hasattr(model, 'feature_importances_'):
         importances = model.feature_importances_
     else:
@@ -209,47 +171,28 @@ def plot_feature_importance(model, feature_names, top_n=20, save_path=None):
         log_message(f"特征名称数量({len(feature_names)})与重要性数量({len(importances)})不匹配", "WARNING")
         feature_names = [f"feature_{i}" for i in range(len(importances))]
     
+    # 排序
     indices = np.argsort(importances)[::-1][:top_n]
     
-    plt.figure(figsize=(10, 8))
-    plt.barh(range(top_n), importances[indices][::-1], color='#3498db')
-    plt.yticks(range(top_n), [feature_names[i] for i in indices[::-1]])
-    plt.xlabel('Feature Importance')
-    plt.title(f'Top {top_n} Feature Importances')
-    plt.tight_layout()
+    # 打印特征重要性
+    log_message(f"\nTop {top_n} 重要特征:")
+    for i in range(min(top_n, len(indices))):
+        log_message(f"  {i+1}. {feature_names[indices[i]]}: {importances[indices[i]]:.4f}")
     
     if save_path:
-        plt.savefig(save_path, dpi=150, bbox_inches='tight')
-        log_message(f"特征重要性图已保存: {save_path}")
-    plt.show()
-    
-    # 打印Top 10特征
-    log_message(f"\nTop 10 重要特征:")
-    for i in range(min(10, top_n)):
-        log_message(f"  {i+1}. {feature_names[indices[i]]}: {importances[indices[i]]:.4f}")
+        log_message(f"特征重要性已保存到: {save_path} (仅文本)")
 
 def plot_roc_curve(model, X_test, y_test, model_name, save_path=None):
-    """绘制ROC曲线"""
+    """绘制ROC曲线 - 已禁用，只打印AUC"""
     if hasattr(model, 'predict_proba'):
         y_score = model.predict_proba(X_test)[:, 1]
         fpr, tpr, _ = roc_curve(y_test, y_score)
         roc_auc = auc(fpr, tpr)
         
-        plt.figure(figsize=(8, 6))
-        plt.plot(fpr, tpr, label=f'{model_name} (AUC = {roc_auc:.3f})', color='#e74c3c', linewidth=2)
-        plt.plot([0, 1], [0, 1], 'k--', label='Random Classifier')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title(f'ROC Curve - {model_name}')
-        plt.legend(loc='lower right')
-        plt.grid(True, alpha=0.3)
+        log_message(f"ROC AUC Score: {roc_auc:.4f}")
         
         if save_path:
-            plt.savefig(save_path, dpi=150, bbox_inches='tight')
-            log_message(f"ROC曲线已保存: {save_path}")
-        plt.show()
+            log_message(f"ROC曲线数据已保存到: {save_path} (仅数值)")
         
         return roc_auc
     else:

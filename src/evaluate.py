@@ -69,24 +69,25 @@ def evaluate_best_model():
     report_df.to_csv(REPORTS_DIR / "classification_report.csv")
     log_message(f"分类报告已保存: {REPORTS_DIR / 'classification_report.csv'}")
     
-    # 混淆矩阵
+    # 混淆矩阵（只打印，不绘图）
     plot_confusion_matrix(y_test, y_pred, "XGBoost", 
-                         FIGURES_DIR / "confusion_matrix.png")
+                         FIGURES_DIR / "confusion_matrix.txt")
     
-    # ROC曲线
+    # ROC曲线（只打印AUC）
     roc_auc = plot_roc_curve(best_model, X_test, y_test, "XGBoost",
-                            FIGURES_DIR / "roc_curve.png")
+                            FIGURES_DIR / "roc_curve.txt")
     
     if roc_auc:
         log_message(f"AUC Score: {roc_auc:.4f}")
     
-    # 特征重要性（需要特征名称）
+    # 特征重要性（只打印，不绘图）
     feature_names = get_feature_names()
-    # 移除标签列（因为X中不包含label和attack_cat）
+    # 移除标签列
     feature_names = [f for f in feature_names if f not in ['attack_cat', 'label']]
     
     plot_feature_importance(best_model, feature_names, top_n=20, 
-                               save_path=FIGURES_DIR / "feature_importance.png")    
+                               save_path=FIGURES_DIR / "feature_importance.txt")    
+    
     # 分析误分类样本
     misclassified = np.where(y_pred != y_test)[0]
     log_message(f"\n误分类样本数: {len(misclassified)}/{len(y_test)} ({len(misclassified)/len(y_test)*100:.2f}%)")
@@ -107,6 +108,20 @@ def evaluate_best_model():
     
     log_message(f"假阳性率: {fp_rate:.4f} ({fp_rate*100:.2f}%)")
     log_message(f"假阴性率: {fn_rate:.4f} ({fn_rate*100:.2f}%)")
+    
+    # 额外性能指标
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+    
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    
+    log_message(f"\n综合性能指标:")
+    log_message(f"  准确率 (Accuracy):  {accuracy:.4f}")
+    log_message(f"  精确率 (Precision): {precision:.4f}")
+    log_message(f"  召回率 (Recall):    {recall:.4f}")
+    log_message(f"  F1分数 (F1-Score):  {f1:.4f}")
     
     log_message("\n模型评估完成！")
 
