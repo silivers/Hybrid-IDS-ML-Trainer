@@ -1,5 +1,5 @@
 """
-配置文件 - 根据你的数据格式调整
+配置文件 - XGBoost入侵检测系统
 """
 
 import os
@@ -32,34 +32,24 @@ TEST_FILE = "UNSW_NB15_testing-set.csv"
 RANDOM_STATE = 42
 CV_FOLDS = 5
 
-# 随机森林参数
-RF_PARAMS = {
-    'n_estimators': 100,
-    'max_depth': 15,
-    'min_samples_split': 10,
-    'min_samples_leaf': 4,
-    'random_state': RANDOM_STATE,
-    'n_jobs': -1
-}
-
-# XGBoost参数
+# XGBoost参数（优化配置）
 XGB_PARAMS = {
-    'n_estimators': 200,
-    'max_depth': 10,
-    'learning_rate': 0.05,
-    'subsample': 0.8,
-    'colsample_bytree': 0.8,
-    'random_state': RANDOM_STATE,
-    'use_label_encoder': False,
-    'eval_metric': 'logloss'
+    'n_estimators': 200,           # 树的数量
+    'max_depth': 10,               # 树的最大深度
+    'learning_rate': 0.05,         # 学习率
+    'subsample': 0.8,              # 样本采样比例
+    'colsample_bytree': 0.8,       # 特征采样比例
+    'random_state': RANDOM_STATE,  # 随机种子
+    'use_label_encoder': False,    # 不使用标签编码器
+    'eval_metric': 'logloss',      # 评估指标
+    'n_jobs': -1                   # 使用所有CPU核心
 }
 
-# 类别特征 - 根据你的数据格式，这些列是类别特征
+# 类别特征
 CATEGORICAL_COLS = ['proto', 'service', 'state']
 
-# 要删除的列（id列不需要用于训练）
+# 要删除的列
 DROP_COLS = ['id']
 
-# 特征数量（不包括 attack_cat 和 label）
-# 你的数据有 46 列，减去 id, attack_cat, label = 43 个特征
+# 特征数量
 EXPECTED_FEATURES = 43
