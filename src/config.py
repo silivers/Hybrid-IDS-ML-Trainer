@@ -37,7 +37,6 @@ XGB_PARAMS = {
     'subsample': 0.8,              # 样本采样比例
     'colsample_bytree': 0.8,       # 特征采样比例
     'random_state': RANDOM_STATE,  # 随机种子
-    'use_label_encoder': False,    # 不使用标签编码器
     'eval_metric': 'logloss',      # 评估指标
     'n_jobs': -1                   # 使用所有CPU核心
 }
