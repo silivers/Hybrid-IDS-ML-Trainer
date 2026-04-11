@@ -18,7 +18,8 @@ def print_menu():
     print("3. 🚀 训练XGBoost模型")
     print("4. 📈 评估XGBoost模型")
     print("5. ⚡ 超参数调优 (优化XGBoost)")
-    print("6. 🔄 运行完整流程 (1->2->3->4)")
+    print("6. 📄 生成完整模型报告")
+    print("7. 🔄 运行完整流程 (1->2->3->4->6)")
     print("0. ❌ 退出")
     print("="*60)
 
@@ -48,7 +49,7 @@ def run_complete_pipeline():
     print(">>> 步骤3: 训练XGBoost模型")
     print("="*60)
     from src import train_models as tm
-    results_df, model = tm.train_xgboost_model()
+    metrics, model = tm.train_xgboost_model()
     if model is None:
         print("❌ 模型训练失败，停止流程")
         return
@@ -58,7 +59,17 @@ def run_complete_pipeline():
     print(">>> 步骤4: 评估XGBoost模型")
     print("="*60)
     from src import evaluate as ev
-    ev.evaluate_xgboost_model()
+    eval_results = ev.evaluate_xgboost_model()
+    if eval_results is None:
+        print("❌ 模型评估失败，停止流程")
+        return
+    
+    # 5. 生成完整报告
+    print("\n" + "="*60)
+    print(">>> 步骤5: 生成完整模型报告")
+    print("="*60)
+    from src import report_generator as rg
+    rg.generate_model_report()
     
     print("\n" + "="*60)
     print("✅ 完整流程运行完成！")
@@ -71,7 +82,7 @@ def main():
     
     while True:
         print_menu()
-        choice = input("请输入选择 [0-6]: ").strip()
+        choice = input("请输入选择 [0-7]: ").strip()
         
         if choice == '1':
             print("\n" + "="*60)
@@ -112,8 +123,15 @@ def main():
                 ht.main()
             else:
                 print("已取消")
-                
+        
         elif choice == '6':
+            print("\n" + "="*60)
+            print("生成完整模型报告")
+            print("="*60)
+            from src import report_generator as rg
+            rg.generate_model_report()
+            
+        elif choice == '7':
             run_complete_pipeline()
             
         elif choice == '0':
@@ -122,7 +140,7 @@ def main():
             break
             
         else:
-            print("❌ 无效选择，请重新输入 (0-6)")
+            print("❌ 无效选择，请重新输入 (0-7)")
         
         # 询问是否继续
         if choice != '0':

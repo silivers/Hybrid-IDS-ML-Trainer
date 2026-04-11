@@ -14,14 +14,11 @@ DATA_DIR = PROJECT_ROOT / "dataset" / "Training and Testing Sets"
 # 模型保存路径
 MODELS_DIR = PROJECT_ROOT / "models"
 
-# 结果输出路径
-RESULTS_DIR = PROJECT_ROOT / "results"
-FIGURES_DIR = RESULTS_DIR / "figures"
-REPORTS_DIR = RESULTS_DIR / "reports"
-LOGS_DIR = RESULTS_DIR / "logs"
+# 结果输出路径（只保留 reports）
+REPORTS_DIR = PROJECT_ROOT / "reports"
 
 # 创建必要的目录
-for dir_path in [MODELS_DIR, FIGURES_DIR, REPORTS_DIR, LOGS_DIR]:
+for dir_path in [MODELS_DIR, REPORTS_DIR]:
     dir_path.mkdir(parents=True, exist_ok=True)
 
 # 数据文件名称
