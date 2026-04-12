@@ -1,5 +1,5 @@
 """
-模型评估脚本 - XGBoost入侵检测系统评估
+模型评估脚本 - XGBoost入侵检测系统评估（精简版）
 """
 
 import sys
@@ -10,25 +10,16 @@ import numpy as np
 from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score,
                              confusion_matrix, roc_curve, auc)
 from src.utils import load_model, log_message
+from src.config import SELECTED_FEATURES
 
 def get_feature_names():
-    """获取XGBoost模型的特征名称"""
-    feature_names = [
-        'srcip', 'sport', 'dstip', 'dsport', 'proto', 'state', 'dur', 'sbytes', 
-        'dbytes', 'sttl', 'dttl', 'sloss', 'dloss', 'service', 'Sload', 'Dload', 
-        'Spkts', 'Dpkts', 'swin', 'dwin', 'stcpb', 'dtcpb', 'smeansz', 'dmeansz', 
-        'trans_depth', 'res_bdy_len', 'Sjit', 'Djit', 'Stime', 'Ltime', 'Sintpkt', 
-        'Dintpkt', 'tcprtt', 'synack', 'ackdat', 'is_sm_ips_ports', 'ct_state_ttl', 
-        'ct_flw_http_mthd', 'is_ftp_login', 'ct_ftp_cmd', 'ct_srv_src', 'ct_srv_dst', 
-        'ct_dst_ltm', 'ct_src_ltm', 'ct_src_dport_ltm', 'ct_dst_sport_ltm', 
-        'ct_dst_src_ltm'
-    ]
-    return feature_names
+    """获取XGBoost模型的特征名称（精简版）"""
+    return SELECTED_FEATURES.copy()
 
 def evaluate_xgboost_model():
     """评估XGBoost模型，返回评估结果字典"""
     log_message("="*60)
-    log_message("XGBoost入侵检测系统 - 模型评估")
+    log_message("XGBoost入侵检测系统 - 模型评估（精简版）")
     log_message("="*60)
     
     # 获取预处理数据
@@ -41,6 +32,7 @@ def evaluate_xgboost_model():
             return None
         X_train, X_test, y_train, y_test = result
         log_message(f"✓ 数据加载成功，测试集大小: {X_test.shape}")
+        log_message(f"  特征数量: {X_test.shape[1]}")
     except Exception as e:
         log_message(f"数据加载失败: {e}", "ERROR")
         return None
@@ -82,7 +74,9 @@ def evaluate_xgboost_model():
     if hasattr(xgboost_model, 'feature_importances_'):
         importances = xgboost_model.feature_importances_
         feature_names = get_feature_names()
+        # 确保特征名称数量匹配
         if len(feature_names) != len(importances):
+            log_message(f"警告：特征名称数量({len(feature_names)})与重要性数量({len(importances)})不匹配", "WARNING")
             feature_names = [f"feature_{i}" for i in range(len(importances))]
         indices = np.argsort(importances)[::-1]
     else:

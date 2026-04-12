@@ -1,3 +1,4 @@
+# src/report_generator.py (完整修复版)
 """
 模型报告生成器 - 精简版XGBoost入侵检测系统报告
 """
@@ -125,19 +126,28 @@ class XGBoostReportGenerator:
             self.report['roc_auc'] = f"{roc_auc:.3f}"
     
     def add_feature_importance(self, feature_importance_dict):
-        """特征重要性 - 只保留前5个"""
+        """特征重要性 - 只保留前5个 - 修复版"""
         importances = feature_importance_dict.get('importances')
         indices = feature_importance_dict.get('indices')
         feature_names = feature_importance_dict.get('feature_names')
         
         if importances is not None and indices is not None:
             top_features = []
+            # 确保特征名称存在
+            if feature_names is None:
+                feature_names = [f"feature_{i}" for i in range(len(importances))]
+            
             for i in range(min(5, len(indices))):
-                feat_name = feature_names[indices[i]] if feature_names and indices[i] < len(feature_names) else f"特征_{indices[i]}"
+                idx = indices[i]
+                if idx < len(feature_names):
+                    feat_name = feature_names[idx]
+                else:
+                    feat_name = f"feature_{idx}"
+                
                 top_features.append({
                     'rank': i + 1,
                     'name': feat_name,
-                    'importance': f"{importances[indices[i]]:.2%}"
+                    'importance': f"{importances[idx]:.2%}"
                 })
             
             self.report['top_features'] = top_features
@@ -276,10 +286,12 @@ def generate_model_report():
         import traceback
         traceback.print_exc()
         return None
-    
+
+
 def main():
     """主入口函数"""
     generate_model_report()
+
 
 if __name__ == "__main__":
     generate_model_report()
