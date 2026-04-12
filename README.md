@@ -16,28 +16,28 @@
 
 ## 项目结构
 
-├── dataset/
-│   └── Training and Testing Sets/
-│       ├── UNSW_NB15_training-set.csv
-│       └── UNSW_NB15_testing-set.csv
-├── models/
-│   ├── xgboost.pkl
-│   ├── xgboost_label_encoders.pkl
-│   └── xgboost_scaler.pkl
-├── reports/
-│   └── xgboost_report_*.md
-├── src/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── utils.py
-│   ├── data_exploration.py
-│   ├── preprocess.py
-│   ├── train_models.py
-│   ├── evaluate.py
-│   ├── hyperparameter_tuning.py
-│   └── report_generator.py
-├── requirements.txt
-└── main.py
+- dataset/
+    - Training and Testing Sets/
+        - UNSW_NB15_training-set.csv
+        - UNSW_NB15_testing-set.csv
+- models/
+    - xgboost.pkl
+    - xgboost_label_encoders.pkl
+    - xgboost_scaler.pkl
+- reports/
+    - xgboost_report_*.md
+- src/
+    - __init__.py
+    - config.py
+    - utils.py
+    - data_exploration.py
+    - preprocess.py
+    - train_models.py
+    - evaluate.py
+    - hyperparameter_tuning.py
+    - report_generator.py
+- requirements.txt
+- main.py
 
 ## 快速开始
 
@@ -55,6 +55,8 @@ pip install -r requirements.txt
 python main.py
 
 ### 交互菜单
+
+
 
 ============================================================
 XGBoost入侵检测系统模型训练 
