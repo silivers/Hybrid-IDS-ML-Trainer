@@ -7,12 +7,11 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-import numpy as np
 import time
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import xgboost as xgb
 from src.config import XGB_PARAMS
-from src.utils import save_model, log_message
+from src.utils import save_model
 from src.preprocess import get_data
 
 def train_xgboost_with_progress(X_train, y_train, X_test, y_test, params):

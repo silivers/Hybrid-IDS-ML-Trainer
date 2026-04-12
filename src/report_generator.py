@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 import numpy as np
 from datetime import datetime
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report
 from src.config import REPORTS_DIR, XGB_PARAMS
 from src.utils import log_message
 
