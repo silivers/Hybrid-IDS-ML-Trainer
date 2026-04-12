@@ -16,28 +16,73 @@
 
 ## 项目结构
 
-- dataset                                    # 数据集目录
-    - Training and Testing Sets/              # UNSW-NB15数据集文件夹
-      - UNSW_NB15_training-set.csv            # 训练集数据
-      - UNSW_NB15_testing-set.csv             # 测试集数据
-- models                                     # 训练好的模型存储目录
-  - xgboost.pkl                             # XGBoost模型文件
-  - xgboost_label_encoders.pkl              # 类别特征编码器
-  - xgboost_scaler.pkl                      # 特征标准化器
-- reports/                                   # 评估报告输出目录
-  - xgboost_report_*.md                     # Markdown格式的模型评估报告
-- src                                        # 源代码目录
-  - __init__.py                             # 包初始化文件
-  - config.py                               # 配置文件
-  - utils.py                                # 工具函数
-  - data_exploration.py                     # 数据探索脚本
-  - preprocess.py                           # 数据预处理
-  - train_models.py                         # XGBoost模型训练脚本
-  - evaluate.py                             # 模型评估脚本
-  - hyperparameter_tuning.py                # 超参数调优
-  - report_generator.py                     # 报告生成器
-- requirements.txt                          # Python依赖包列表
-- main.py                                   # 主入口脚本
+dataset
+:   数据集目录
+
+    Training and Testing Sets/
+    :   UNSW-NB15数据集文件夹
+    
+        UNSW_NB15_training-set.csv
+        :   训练集数据（约17万条记录）
+    
+        UNSW_NB15_testing-set.csv
+        :   测试集数据（约4.5万条记录）
+
+models
+:   训练好的模型存储目录
+
+    xgboost.pkl
+    :   XGBoost模型文件
+    
+    xgboost_label_encoders.pkl
+    :   类别特征编码器（用于proto/service/state）
+    
+    xgboost_scaler.pkl
+    :   特征标准化器（StandardScaler）
+
+reports/
+:   评估报告输出目录
+
+    xgboost_report_*.md
+    :   Markdown格式的模型评估报告（文件名含时间戳）
+
+src
+:   源代码目录
+
+    __init__.py
+    :   包初始化文件
+    
+    config.py
+    :   配置文件（路径、参数、特征列定义）
+    
+    utils.py
+    :   工具函数（日志、数据加载、模型保存/加载）
+    
+    data_exploration.py
+    :   数据探索脚本（查看数据分布和攻击类型）
+    
+    preprocess.py
+    :   数据预处理（编码、标准化、缓存）
+    
+    train_models.py
+    :   XGBoost模型训练脚本
+    
+    evaluate.py
+    :   模型评估脚本（计算各项指标）
+    
+    hyperparameter_tuning.py
+    :   超参数调优（网格搜索）
+    
+    report_generator.py
+    :   报告生成器（生成通俗易懂的Markdown报告）
+
+requirements.txt
+:   Python依赖包列表（numpy, pandas, scikit-learn, xgboost, joblib）
+
+main.py
+:   主入口脚本（提供交互式菜单）
+
+
 
 ## 快速开始
 
