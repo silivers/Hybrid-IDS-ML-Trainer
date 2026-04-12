@@ -16,28 +16,28 @@
 
 ## 项目结构
 
-- dataset/
-    - Training and Testing Sets/
-        - UNSW_NB15_training-set.csv
-        - UNSW_NB15_testing-set.csv
-- models/
-    - xgboost.pkl
-    - xgboost_label_encoders.pkl
-    - xgboost_scaler.pkl
-- reports/
-    - xgboost_report_*.md
-- src/
-    - __init__.py
-    - config.py
-    - utils.py
-    - data_exploration.py
-    - preprocess.py
-    - train_models.py
-    - evaluate.py
-    - hyperparameter_tuning.py
-    - report_generator.py
-- requirements.txt
-- main.py
+- dataset                                    # 数据集目录
+    - Training and Testing Sets/              # UNSW-NB15数据集文件夹
+      - UNSW_NB15_training-set.csv            # 训练集数据
+      - UNSW_NB15_testing-set.csv             # 测试集数据
+- models                                     # 训练好的模型存储目录
+  - xgboost.pkl                             # XGBoost模型文件
+  - xgboost_label_encoders.pkl              # 类别特征编码器（用于proto/service/state）
+  - xgboost_scaler.pkl                      # 特征标准化器（StandardScaler）
+- reports/                                   # 评估报告输出目录
+  - xgboost_report_*.md                     # Markdown格式的模型评估报告（文件名含时间戳）
+- src                                        # 源代码目录
+  - __init__.py                             # 包初始化文件
+  - config.py                               # 配置文件（路径、参数、特征列定义）
+  - utils.py                                # 工具函数（日志、数据加载、模型保存/加载）
+  - data_exploration.py                     # 数据探索脚本（查看数据分布和攻击类型）
+  - preprocess.py                           # 数据预处理（编码、标准化、缓存）
+  - train_models.py                         # XGBoost模型训练脚本
+  - evaluate.py                             # 模型评估脚本（计算各项指标）
+  - hyperparameter_tuning.py                # 超参数调优（网格搜索）
+  - report_generator.py                     # 报告生成器
+- requirements.txt                          # Python依赖包列表
+- main.py                                   # 主入口脚本（交互式菜单）
 
 ## 快速开始
 
@@ -54,23 +54,7 @@ pip install -r requirements.txt
 
 python main.py
 
-### 交互菜单
 
-
-
-============================================================
-XGBoost入侵检测系统模型训练 
-============================================================
-1. 数据探索 (EDA)
-2. 数据预处理
-3. 训练XGBoost模型
-4. 评估XGBoost模型
-5. 超参数调优 (优化XGBoost)
-6. 生成完整模型报告
-7. 运行完整流程 (1->2->3->4->6)
-8. 退出
-
-============================================================
 
 ## 数据集说明
 
