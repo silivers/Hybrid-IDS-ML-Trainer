@@ -18,26 +18,26 @@
 
 ├── dataset/
 │   └── Training and Testing Sets/
-│       ├── UNSW_NB15_training-set.csv    # 训练数据集
-│       └── UNSW_NB15_testing-set.csv     # 测试数据集
-├── models/                                # 保存训练好的模型
-│   ├── xgboost.pkl                       # XGBoost模型
-│   ├── xgboost_label_encoders.pkl        # 标签编码器
-│   └── xgboost_scaler.pkl                # 标准化器
-├── reports/                               # 生成的评估报告
-│   └── xgboost_report_*.md               # Markdown格式报告
-├── src/                                   # 源代码目录
+│       ├── UNSW_NB15_training-set.csv
+│       └── UNSW_NB15_testing-set.csv
+├── models/
+│   ├── xgboost.pkl
+│   ├── xgboost_label_encoders.pkl
+│   └── xgboost_scaler.pkl
+├── reports/
+│   └── xgboost_report_*.md
+├── src/
 │   ├── __init__.py
-│   ├── config.py                         # 配置文件
-│   ├── utils.py                          # 工具函数
-│   ├── data_exploration.py               # 数据探索
-│   ├── preprocess.py                     # 数据预处理
-│   ├── train_models.py                   # 模型训练
-│   ├── evaluate.py                       # 模型评估
-│   ├── hyperparameter_tuning.py          # 超参数调优
-│   └── report_generator.py               # 报告生成器
-├── requirements.txt                       # 项目依赖
-└── main.py                               # 主入口脚本
+│   ├── config.py
+│   ├── utils.py
+│   ├── data_exploration.py
+│   ├── preprocess.py
+│   ├── train_models.py
+│   ├── evaluate.py
+│   ├── hyperparameter_tuning.py
+│   └── report_generator.py
+├── requirements.txt
+└── main.py
 
 ## 快速开始
 
@@ -57,7 +57,7 @@ python main.py
 ### 交互菜单
 
 ============================================================
-XGBoost入侵检测系统模型训练 - UNSW-NB15
+XGBoost入侵检测系统模型训练 
 ============================================================
 1. 数据探索 (EDA)
 2. 数据预处理
@@ -94,12 +94,13 @@ XGBoost入侵检测系统模型训练 - UNSW-NB15
 
 XGBoost默认参数配置：
 
-参数: n_estimators, 值: 200, 说明: 决策树数量
-参数: max_depth, 值: 10, 说明: 树的最大深度
-参数: learning_rate, 值: 0.05, 说明: 学习率
-参数: subsample, 值: 0.8, 说明: 样本采样比例
-参数: colsample_bytree, 值: 0.8, 说明: 特征采样比例
-参数: eval_metric, 值: logloss, 说明: 评估指标
+- 参数: n_estimators, 值: 200, 说明: 决策树数量
+
+- 参数: max_depth, 值: 10, 说明: 树的最大深度
+- 参数: learning_rate, 值: 0.05, 说明: 学习率
+- 参数: subsample, 值: 0.8, 说明: 样本采样比例
+- 参数: colsample_bytree, 值: 0.8, 说明: 特征采样比例
+- 参数: eval_metric, 值: logloss, 说明: 评估指标
 
 ## 评估指标
 
@@ -113,9 +114,10 @@ XGBoost默认参数配置：
 
 ### 混淆矩阵分析
 
-预测\实际: 正常, 攻击
-预测正常: 正确识别, 漏报
-预测攻击: 误报, 正确捕获
+- 预测\实际: 正常, 攻击
+
+- 预测正常: 正确识别, 漏报
+- 预测攻击: 误报, 正确捕获
 
 ## 生成的报告
 
