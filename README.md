@@ -9,74 +9,34 @@
 - 数据预处理：处理类别特征、缺失值填充、特征标准化
 - 模型训练：使用XGBoost算法训练入侵检测模型
 - 模型评估：计算准确率、精确率、召回率、F1分数等指标
-- 报告生成：自动生成通俗易懂的Markdown格式评估报告
+- 报告生成：自动生成Markdown格式评估报告
 
 ## 项目结构
 
-dataset
-:   数据集目录
-
-    Training and Testing Sets/
-    :   UNSW-NB15数据集文件夹
-    
-        UNSW_NB15_training-set.csv
-        :   训练集数据（约17万条记录）
-    
-        UNSW_NB15_testing-set.csv
-        :   测试集数据（约4.5万条记录）
-
-models
-:   训练好的模型存储目录
-
-    xgboost.pkl
-    :   XGBoost模型文件
-    
-    xgboost_label_encoders.pkl
-    :   类别特征编码器（用于proto/service/state）
-    
-    xgboost_scaler.pkl
-    :   特征标准化器（StandardScaler）
-    
-    xgboost_feature_names.txt
-    :   特征名称列表
-
-reports/
-:   评估报告输出目录
-
-    xgboost_report_*.md
-    :   Markdown格式的模型评估报告（文件名含时间戳）
-
-src
-:   源代码目录
-    
-    config.py
-    :   配置文件（路径、参数、特征列定义）
-    utils.py
-    :   工具函数（日志、数据加载、模型保存/加载）
-    
-    data_exploration.py
-    :   数据探索脚本（查看数据分布和攻击类型）
-    
-    preprocess.py
-    :   数据预处理（编码、标准化、缓存）
-    
-    train_models.py
-    :   XGBoost模型训练脚本
-    
-    evaluate.py
-    :   模型评估脚本（计算各项指标）
-    
-    hyperparameter_tuning.py
-    :   超参数调优（网格搜索）
-    
-    report_generator.py
-    :   报告生成器（生成通俗易懂的Markdown报告）
-
-requirements.txt
-:   Python依赖包列表（pandas, numpy, scikit-learn, xgboost, joblib等）
-
-main.py
-:   主入口脚本（提供交互式菜单）
+| 文件/目录                                | 说明                        |
+| ---------------------------------------- | --------------------------- |
+| `XGBoost-IDS/`                           | 项目根目录                  |
+| ├── `dataset/`                           | 数据集目录                  |
+| │   └── `Training and Testing Sets/`     | UNSW-NB15数据集文件夹       |
+| │       ├── `UNSW_NB15_training-set.csv` | 训练集数据（约17万条记录）  |
+| │       └── `UNSW_NB15_testing-set.csv`  | 测试集数据（约4.5万条记录） |
+| ├── `models/`                            | 训练好的模型存储目录        |
+| │       ├── `xgboost.pkl`                | XGBoost模型文件             |
+| │       ├── `xgboost_label_encoders.pkl` | 类别特征编码器              |
+| │       ├── `xgboost_scaler.pkl`         | 特征标准化器                |
+| │       └── `xgboost_feature_names.txt`  | 特征名称列表                |
+| ├── `reports/`                           | 评估报告输出目录            |
+| │       └── `xgboost_report_*.md`        | Markdown格式评估报告        |
+| ├── `src/`                               | 源代码目录                  |
+| │       ├── `config.py`                  | 配置文件                    |
+| │       ├── `utils.py`                   | 工具函数                    |
+| │       ├── `data_exploration.py`        | 数据探索脚本                |
+| │       ├── `preprocess.py`              | 数据预处理                  |
+| │       ├── `train_models.py`            | XGBoost模型训练脚本         |
+| │       ├── `evaluate.py`                | 模型评估脚本                |
+| │       └── `report_generator.py`        | 报告生成器                  |
+| ├── `requirements.txt`                   | Python依赖包列表            |
+| └── `main.py`                            | 主入口脚本                  |
 
 ## 快速开始
 
@@ -188,10 +148,3 @@ XGBoost默认参数配置：
 - 通俗易懂的指标解读
 - 安全等级评估
 - 运维建议
-
-## 使用建议
-
-1. 首次使用：选择选项6运行完整流程
-2. 调优模型：运行超参数调优（耗时15-30分钟）
-3. 查看报告：在reports/目录查看生成的Markdown报告
-4. 部署生产：使用models/xgboost.pkl进行实时检测
